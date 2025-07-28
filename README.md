@@ -1,4 +1,4 @@
-# Merge Queue Testing Repository
+# Merge Queue Testing Repository by Shen
 
 This repository is designed to test GitHub merge queues with configurable test duration and failure modes.
 
