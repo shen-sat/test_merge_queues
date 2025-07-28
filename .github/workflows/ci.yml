@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  merge_group:
+    types: [checks_requested]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.1
+        bundler-cache: true
+    
+    - name: Run tests
+      env:
+        TEST_WAIT_TIME: ${{ vars.TEST_WAIT_TIME || '30' }}
+        FORCE_FAILURE: ${{ vars.FORCE_FAILURE || 'false' }}
+      run: |
+        if [ "$FORCE_FAILURE" = "true" ]; then
+          echo "FORCE_FAILURE is set to true - failing the build"
+          exit 1
+        fi
+        bundle exec rspec spec/merge_queue_test_spec.rb -v
